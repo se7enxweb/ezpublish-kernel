@@ -1,5 +1,5 @@
 {
-    "name": "ezsystems/ezpublish-kernel",
+    "name": "se7enxweb/ezpublish-kernel",
     "description": "Kernel used by ezsystems/ezplatform and derivatives. Provides the Content Repository, its APIs, and the application's Symfony framework integration.",
     "homepage": "https://ezplatform.com",
     "license": "GPL-2.0-only",
@@ -7,7 +7,7 @@
         "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
     },
     "require": {
-        "php": "^7.1",
+        "php": "^7.1 || ^8.1",
         "ext-ctype": "*",
         "ext-dom": "*",
         "ext-fileinfo": "*",
