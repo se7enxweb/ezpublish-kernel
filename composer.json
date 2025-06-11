@@ -36,7 +36,7 @@
         "friendsofsymfony/jsrouting-bundle": "^1.6.3",
         "sensio/framework-extra-bundle": "^5.2",
         "jms/translation-bundle": "^1.4",
-        "twig/twig": "^2.10",
+        "twig/twig": "^3.0",
         "composer/package-versions-deprecated": "^1.11"
     },
     "require-dev": {
