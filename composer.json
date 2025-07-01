@@ -7,7 +7,7 @@
         "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
     },
     "require": {
-        "php": "^7.1 || ^8.1",
+        "php": "^7.1 || ^8.1 || ^8.2",
         "ext-ctype": "*",
         "ext-dom": "*",
         "ext-fileinfo": "*",
@@ -18,7 +18,7 @@
         "ext-SPL": "*",
         "ext-xsl": "*",
         "ext-curl": "*",
-        "ezsystems/doctrine-dbal-schema": "^0.1",
+        "se7enxweb/doctrine-dbal-schema": "^0.1",
         "symfony/symfony": "^3.4.17",
         "symfony-cmf/routing": "^2.1",
         "kriswallsmith/buzz": "^0.17.2",
