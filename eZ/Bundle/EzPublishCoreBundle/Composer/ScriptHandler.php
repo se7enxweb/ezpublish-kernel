@@ -9,6 +9,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\Composer;
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as DistributionBundleScriptHandler;
 use Composer\Script\Event;
 
+// 7x : eZ Platform Related Patch : 2025.08
+
 class ScriptHandler extends DistributionBundleScriptHandler
 {
     /**
@@ -92,7 +94,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
     {
         $consoleDir = static::getConsoleDir($event, 'get console dir for asset dump text');
         $event->getIO()->write('<info>To dump eZ Publish production assets, which is needed for production environment, execute the following:</info>');
-        $event->getIO()->write("    php ${consoleDir}/console assetic:dump --env=prod web");
+        $event->getIO()->write("    php $consoleDir/console assetic:dump --env=prod web");
         $event->getIO()->write('');
     }
 
@@ -113,7 +115,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
         $installCommands = $options['ez-install-command'] ?? 'composer ezplatform-install';
         // Allow usage of array structure from 'ez-install-command' in case several commands are needed
         foreach ((array)$installCommands as $installCommand) {
-            $installCommandText .= "<comment>    \$  ${installCommand}</comment>\n";
+            $installCommandText .= "<comment>    \$  $installCommand</comment>\n";
         }
 
         $installCommandText = trim($installCommandText);
@@ -128,12 +130,12 @@ class ScriptHandler extends DistributionBundleScriptHandler
  \/____/ \/_______/    \/_/   \/____/\/__/\/_/ \/__/ \/_/ \/___/  \/_/  \/_/\/_/\/_/
 
 
-<fg=cyan>Welcome to ${installName}!</fg=cyan>
+<fg=cyan>Welcome to $installName!</fg=cyan>
 
 <options=bold>Quick installation to test in local dev environment:</>
 <comment>    $  export SYMFONY_ENV="dev"</comment>
-${installCommandText}
-<comment>    $  php ${consoleDir}/console server:run</comment>
+$installCommandText
+<comment>    $  php $consoleDir/console server:run</comment>
 
 Note:
 - The instructions assume you execute commands with the CLI user that extracted/installed the software.
@@ -142,7 +144,7 @@ Note:
   - Give you the URL to the front end of the installation. TIP: Add "/admin" to reach back end.
 
 See main installation instructions with Nginx/Apache for production, remote, or better performing dev setup in:
-${installUrl}
+$installUrl
 
 EOT
         );
