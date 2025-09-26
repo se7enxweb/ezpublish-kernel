@@ -7,7 +7,7 @@
         "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
     },
     "require": {
-        "php": "^7.1 || ^8.1 || ^8.2",
+        "php": "^7.1 || ^8.1 || ^8.2 || ^8.3",
         "ext-ctype": "*",
         "ext-dom": "*",
         "ext-fileinfo": "*",
@@ -23,7 +23,7 @@
         "symfony-cmf/routing": "^2.1",
         "kriswallsmith/buzz": "^0.17.2",
         "se7enxweb/sensio-distribution-bundle": "^5.0.22",
-        "nelmio/cors-bundle": "^1.5.0",
+        "nelmio/cors-bundle": "^1.5.0 || ^2.5.0",
         "ibexa/templated-uri-bundle": "^3.3.2.2",
         "pagerfanta/pagerfanta": "^2.0",
         "ocramius/proxy-manager": "^2.1",
