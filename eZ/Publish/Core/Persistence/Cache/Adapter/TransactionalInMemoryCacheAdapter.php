@@ -298,6 +298,27 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
         return false;
     }
 
+    ################################################################################
+    # TEMPORARY COMPATIBILITY LAYER - 2026-02-05                                  #
+    # Added setContainer() stub for Symfony container compilation compatibility    #
+    # This method is called during container service definition but is not used    #
+    # in the actual cache adapter runtime. Simple no-op implementation needed.     #
+    ################################################################################
+    /**
+     * Temporary stub for Symfony container compatibility.
+     * This method is called during container compilation by service definitions
+     * but is not functionally required for cache adapter operations.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface|null $container
+     * @return void
+     */
+    public function setContainer($container = null)
+    {
+        // No-op stub for container compilation compatibility
+        // The container is not needed for TransactionalInMemoryCacheAdapter operations
+    }
+    ################################################################################
+
     private function clearInMemoryPools(): void
     {
         foreach ($this->inMemoryPools as $inMemory) {

@@ -26,10 +26,17 @@ class CacheFactory implements ContainerAwareInterface
      *
      * @return \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
      */
-    public function getCachePool(ConfigResolverInterface $configResolver)
+    public function getCachePool(ConfigResolverInterface $configResolver = null)
     {
-        /** @var \Symfony\Component\Cache\Adapter\AdapterInterface $cacheService */
-        $cacheService = $this->container->get($configResolver->getParameter('cache_service_name'));
+        $cacheService = null;
+
+        if ($configResolver !== null) {
+            $cacheServiceName = $configResolver->getParameter('cache_service_name');
+	    /** @var \Symfony\Component\Cache\Adapter\AdapterInterface $cacheService */
+            $cacheService = $this->container->get($cacheServiceName);
+        } else {
+            $cacheService = $this->container->get('cache.app');
+        }
 
         // If cache service is already implementing TagAwareAdapterInterface, return as-is
         if ($cacheService instanceof TagAwareAdapterInterface) {
@@ -37,7 +44,7 @@ class CacheFactory implements ContainerAwareInterface
         }
 
         return new TagAwareAdapter(
-            $cacheService
-        );
+	     $cacheService
+	 );
     }
 }

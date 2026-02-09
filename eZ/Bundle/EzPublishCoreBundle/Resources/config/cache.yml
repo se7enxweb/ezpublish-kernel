@@ -2,15 +2,21 @@ parameters:
     ezpublish.cache_pool.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\CacheFactory
 
 services:
-    ezpublish.cache_pool:
+    # Cache the factory-created pool with an inner ID first
+    ezpublish.cache_pool.factory_created:
         # As we support custom TagAware services, we set class as interface here so lazy class is "correct"
         class: Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
         factory: ["@ezpublish.cache_pool.factory", getCachePool]
         arguments: ["@ezpublish.config.resolver"]
-
-    ezpublish.cache_pool.factory:
-        class: "%ezpublish.cache_pool.factory.class%"
-        calls:
+    
+    # Wrap it with TransactionalInMemoryCacheAdapter for production use
+    ezpublish.cache_pool:
+        class: eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalInMemoryCacheAdapter
+        public: true
+        lazy: true
+        arguments:
+            $sharedPool: '@ezpublish.cache_pool.factory_created'
+            $inMemoryPools: []
             - [setContainer, ["@service_container"]]
 
     ezpublish.cache_warmer.config_resolver_cleanup:
