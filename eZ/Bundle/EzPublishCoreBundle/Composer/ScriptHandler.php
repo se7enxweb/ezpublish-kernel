@@ -108,8 +108,8 @@ class ScriptHandler extends DistributionBundleScriptHandler
         $options = self::getOptions($event);
         $consoleDir = static::getConsoleDir($event, 'get console dir for welcome text');
 
-        $installName = $options['ez-install-name'] ?? 'eZ Platform';
-        $installUrl = $options['ez-install-url'] ?? 'https://doc.ezplatform.com/en/latest/getting_started/install_ez_platform/';
+        $installName = $options['ez-install-name'] ?? 'Exponential Platform';
+        $installUrl = $options['ez-install-url'] ?? 'https://platform.exponential.earth/doc/';
 
         $installCommandText = '';
         $installCommands = $options['ez-install-command'] ?? 'composer ezplatform-install';
