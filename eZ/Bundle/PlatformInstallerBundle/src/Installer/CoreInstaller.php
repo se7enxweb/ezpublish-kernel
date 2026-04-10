@@ -11,8 +11,10 @@ namespace EzSystems\PlatformInstallerBundle\Installer;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\DBAL\Schema\Schema;
 use EzSystems\DoctrineSchema\API\Builder\SchemaBuilder;
+use EzSystems\DoctrineSchema\Database\DbPlatform\SqliteDbPlatform;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 /**
@@ -49,6 +51,13 @@ class CoreInstaller extends DbBasedInstaller implements Installer
         // note: schema is built using Schema Builder event-driven API
         $schema = $this->schemaBuilder->buildSchema();
         $databasePlatform = $this->db->getDatabasePlatform();
+        // Use SqliteDbPlatform for SQLite so composite PKs are generated correctly.
+        // The base SqlitePlatform drops composite PKs when any column has autoincrement;
+        // SqliteDbPlatform overrides getCreateTableSQL to disable autoincrement on
+        // composite-PK tables first, producing the correct PRIMARY KEY(id, version) DDL.
+        if ($databasePlatform instanceof SqlitePlatform && !($databasePlatform instanceof SqliteDbPlatform)) {
+            $databasePlatform = new SqliteDbPlatform();
+        }
         $queries = array_merge(
             $this->getDropSqlStatementsForExistingSchema($schema, $databasePlatform),
             // generate schema DDL queries
