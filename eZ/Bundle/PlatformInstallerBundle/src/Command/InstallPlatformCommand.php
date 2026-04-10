@@ -123,6 +123,38 @@ class InstallPlatformCommand extends Command
 
     private function checkCreateDatabase(OutputInterface $output)
     {
+        $params = $this->db->getParams();
+        $isSQLite = ($params['driver'] ?? '') === 'pdo_sqlite'
+            || $this->db->getDatabasePlatform()->getName() === 'sqlite';
+
+        if ($isSQLite) {
+            // SQLite is file-based; DBAL's listDatabases() is not supported.
+            // Create the database file (and its parent directory) directly.
+            $path = $params['path'] ?? null;
+            if (empty($path)) {
+                $this->output->writeln('<error>SQLite requires a "path" parameter in the Doctrine DBAL connection config.</error>');
+                exit(self::EXIT_GENERAL_DATABASE_ERROR);
+            }
+            if (!file_exists($path)) {
+                $dir = \dirname($path);
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0755, true);
+                }
+                touch($path);
+                $output->writeln(sprintf(
+                    '<info>Created SQLite database <comment>%s</comment></info>',
+                    $path
+                ));
+            } else {
+                $output->writeln(sprintf(
+                    '<info>SQLite database <comment>%s</comment> already exists. Skipped.</info>',
+                    $path
+                ));
+            }
+
+            return;
+        }
+
         $output->writeln(
             sprintf(
                 'Creating the database <comment>%s</comment> if it does not exist, executing command doctrine:database:create --if-not-exists',
@@ -181,7 +213,17 @@ class InstallPlatformCommand extends Command
             $command .= sprintf(' --siteaccess=%s', $siteaccess);
         }
 
-        $this->executeCommand($output, $command);
+        try {
+            $this->executeCommand($output, $command);
+        } catch (\RuntimeException $exception) {
+            // A fresh install may have no content to index yet; treat that as a non-fatal warning.
+            if (strpos($exception->getMessage(), 'ezplatform:reindex') !== false) {
+                $output->writeln('<comment>Re-indexing reported no content to index on this fresh install (non-fatal).</comment>');
+
+                return;
+            }
+            throw $exception;
+        }
     }
 
     /**
